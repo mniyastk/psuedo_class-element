@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Advanced Selectors & Properties: Interactive Slides</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background-color: #f6faff;
+      margin: 0;
+      padding: 0;
+    }
+    #slideBox {
+      max-width: 800px;
+      background: #fff;
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+      margin: 50px auto;
+      padding: 40px;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+    h2 { color: #0066cc; }
+    code, pre {
+      background: #eef8ff;
+      border-radius: 4px;
+      padding: 2px 6px;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    button:hover:not(:disabled) { background: #005bbb; }
+    button:disabled { background: #ccc; cursor: default; }
+    .demo {
+      border: 1px solid #ddd;
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 8px;
+      background: #fafcff;
+    }
+    .hoverBtn:hover {
+      background-color: #b2f2bb;
+      color: #003300;
+    }
+    .focusInput:focus {
+      border: 2px solid #00bb88;
+    }
+    .demo-box {
+      width: 220px;
+      padding: 8px;
+      margin-top: 10px;
+      border: 1px dashed #aaa;
+    }
+  </style>
+</head>
+<body>
+  <div id="slideBox"></div>
+  <div style="text-align:center;">
+    <button id="prev">Previous</button>
+    <button id="next">Next</button>
+  </div>
+
+<script>
+const slides = [
+{
+  title: "Welcome to Advanced CSS",
+  body: `<p>In this interactive slideshow, you’ll learn the following concepts step-by-step:</p>
+  <ul>
+    <li>Pseudo-classes & Pseudo-elements</li>
+    <li>Combinators</li>
+    <li>Specificity & !important</li>
+    <li>Overflow, Z-index, Opacity, Max-width</li>
+  </ul>
+  <p>Click Next ➡️ to begin!</p>`
+},
+{
+  title: "🎯 Pseudo-classes",
+  body: `<p><strong>Pseudo-classes</strong> define a special state of an element.</p>
+  <ul>
+    <li><code>:hover</code> – when the mouse pointer is over an element.</li>
+    <li><code>:focus</code> – when an input is active or focused.</li>
+    <li><code>:active</code> – when an element is being clicked.</li>
+  </ul>
+  <pre>a:hover { color: blue; }</pre>
+  <div class='demo'>
+    <button class='hoverBtn'>Hover me!</button><br><br>
+    <input class='focusInput' placeholder='Click or tab here'>
+    <p>Try hovering over the button or focusing on the input.</p>
+  </div>`
+},
+{
+  title: "✏️ Pseudo-elements",
+  body: `<p><strong>Pseudo-elements</strong> let you style a specific part of an element's content.</p>
+  <ul>
+    <li><code>::before</code> - adds content before an element.</li>
+    <li><code>::after</code> - adds content after an element.</li>
+    <li><code>::first-letter</code> - targets the first letter.</li>
+  </ul>
+  <pre>p::first-letter { font-size: 2em; color: red; }</pre>
+  <div class='demo'>
+    <p style='font-size:1.1em;'>In a real example, the <strong>first letter</strong> of this paragraph could appear larger and colored.</p>
+  </div>`
+},
+{
+  title: "🔗 Combinators in CSS",
+  body: `<p>Combinators define relationships between selectors.</p>
+  <ul>
+    <li><b>Descendant (space)</b>: <code>div p</code> selects all <code>p</code> inside <code>div</code> (any level).</li>
+    <li><b>Child (>)</b>: <code>div > p</code> selects only immediate children.</li>
+    <li><b>Adjacent (+)</b>: <code>h1 + p</code> selects the <code>p</code> right after an <code>h1</code>.</li>
+    <li><b>General (~)</b>: <code>h1 ~ p</code> selects all <code>p</code> siblings after <code>h1</code>.</li>
+  </ul>
+  <div class='demo'>
+    <h1>Heading</h1>
+    <p>This paragraph comes right after the heading.</p>
+    <p>This one too.</p>
+  </div>`
+},
+{
+  title: "⚖️ Specificity and !important",
+  body: `<p><strong>Specificity</strong> decides which CSS rule wins when multiple rules apply.</p>
+  <ol>
+    <li>Inline Styles (highest weight)</li>
+    <li>ID selectors (e.g., <code>#title</code>)</li>
+    <li>Class/pseudo-class selectors (e.g., <code>.box</code>, <code>:hover</code>)</li>
+    <li>Element selectors (e.g., <code>div</code>, <code>p</code>)</li>
+  </ol>
+  <pre>
+p {color: blue;}
+.main p {color: red;}
+#section p {color: green !important;}
+  </pre>
+  <div class='demo' id='section'><div class='main'><p>This paragraph uses the most specific rule.</p></div></div>`
+},
+{
+  title: "🪟 Overflow and Max-width",
+  body: `<p><b>Overflow</b> controls how content is displayed when it spills outside its container,<br>
+  while <b>max-width</b> defines how wide an element can grow.</p>
+  <pre>
+div.box { max-width:300px; overflow:auto; }
+  </pre>
+  <div class='demo-box' style='max-width:200px; overflow:auto; background:#f4f8ff;'>
+    This is some sample content that is very long and will show a scroll bar if it's longer than the box size. Try shrinking your browser window.
+  </div>`
+},
+{
+  title: "🧱 Z-index and Opacity",
+  body: `<p><strong>Z-index</strong> controls layering (which element is on top), while <strong>Opacity</strong> controls transparency.</p>
+  <pre>
+.box1 { position:relative; z-index:2; opacity:0.8; }
+.box2 { position:relative; z-index:1; opacity:0.5; }
+  </pre>
+  <div class='demo' style='position:relative; height:60px;'>
+    <div style='background:#ff6666; width:80px; height:50px; position:absolute; z-index:1; left:0; opacity:0.7;'>Box1</div>
+    <div style='background:#66aaff; width:80px; height:50px; position:absolute; left:50px; top:10px; z-index:2; opacity:0.9;'>Box2 overlaps</div>
+  </div>`
+},
+{
+  title: "🎓 Review & Practice",
+  body: `<p>Let's check your understanding!</p>
+  <ul>
+    <li>💡 Which pseudo-class highlights links on mouse over?</li>
+    <li>💡 How does <code>::after</code> differ from <code>:after</code>?</li>
+    <li>💡 What happens when <code>overflow:hidden</code> is used?</li>
+    <li>💡 What's the difference between <code>z-index</code> and <code>opacity</code>?</li>
+  </ul>
+  <p><b>Challenge:</b> Create your own profile card combining <code>:hover</code>, <code>::before</code>, and <code>z-index</code> effects!</p>`
+}
+];
+
+let current = 0;
+const slideBox = document.getElementById('slideBox');
+const prevBtn = document.getElementById('prev');
+const nextBtn = document.getElementById('next');
+
+function renderSlide(index) {
+  const slide = slides[index];
+  slideBox.innerHTML = `<h2>${slide.title}</h2>${slide.body}`;
+  prevBtn.disabled = index === 0;
+  nextBtn.disabled = index === slides.length - 1;
+}
+prevBtn.addEventListener('click', () => {
+  if (current > 0) current--;
+  renderSlide(current);
+});
+nextBtn.addEventListener('click', () => {
+  if (current < slides.length - 1) current++;
+  renderSlide(current);
+});
+renderSlide(current);
+</script>
+</body>
+</html>
